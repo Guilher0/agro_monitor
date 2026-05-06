@@ -15,14 +15,16 @@ use Inertia\Inertia;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 
-Route::middleware([
-    'web',
-    InitializeTenancyByDomain::class,
-    PreventAccessFromCentralDomains::class,
-])->group(function () {
+Route::domain('{tenant_domain}')
+    ->where(['tenant_domain' => '^(?!localhost$)(?!127\\.0\\.0\\.1$).+'])
+    ->middleware([
+        'web',
+        InitializeTenancyByDomain::class,
+        PreventAccessFromCentralDomains::class,
+    ])->group(function () {
 
-    // ─── Raiz do tenant: redireciona para o dashboard ────────────────────────
-    Route::get('/', fn () => redirect()->route('dashboard'));
+    // Rotas de autenticação do Breeze no contexto de tenant
+    require __DIR__.'/auth.php';
 
     // ─── Rotas autenticadas do tenant ────────────────────────────────────────
     Route::middleware(['auth', 'verified'])->group(function () {
@@ -55,7 +57,3 @@ Route::middleware([
             ->except(['show']);
     });
 });
-
-// Rotas de autenticação do Breeze também disponíveis no contexto de tenant
-// (login/logout para usuários que acessam via subdomínio do tenant)
-require __DIR__.'/auth.php';

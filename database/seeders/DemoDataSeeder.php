@@ -31,10 +31,13 @@ class DemoDataSeeder extends Seeder
 
     public function run(): void
     {
+        $tenantId = (string) tenant('id');
+
         // ───────────────────────────────────────────
         // ATIVOS — Parque de máquinas da Fazenda Demo
         // ───────────────────────────────────────────
         $tractor = Asset::create([
+            'tenant_id'                 => $tenantId,
             'name'                      => 'John Deere 5090E',
             'type'                      => 'tractor',
             'serial_number'             => 'JD5090E-2019-001',
@@ -49,6 +52,7 @@ class DemoDataSeeder extends Seeder
         ]);
 
         $tractor2 = Asset::create([
+            'tenant_id'                 => $tenantId,
             'name'                      => 'Massey Ferguson 7718',
             'type'                      => 'tractor',
             'serial_number'             => 'MF7718-2021-007',
@@ -63,6 +67,7 @@ class DemoDataSeeder extends Seeder
         ]);
 
         $harvester = Asset::create([
+            'tenant_id'                 => $tenantId,
             'name'                      => 'New Holland CR9.90',
             'type'                      => 'harvester',
             'serial_number'             => 'NH-CR990-2020-003',
@@ -77,6 +82,7 @@ class DemoDataSeeder extends Seeder
         ]);
 
         $sprayer = Asset::create([
+            'tenant_id'                 => $tenantId,
             'name'                      => 'Jacto Uniport 3030',
             'type'                      => 'sprayer',
             'serial_number'             => 'JACTO-3030-2022-012',
@@ -94,6 +100,7 @@ class DemoDataSeeder extends Seeder
         // TALHÕES — Subdivisões da fazenda
         // ───────────────────────────────────────────
         $plotA = Plot::create([
+            'tenant_id'           => $tenantId,
             'name'                 => 'Talhão A — Soja',
             'area_hectares'        => 48.50,
             'culture'              => 'Soja',
@@ -105,6 +112,7 @@ class DemoDataSeeder extends Seeder
         ]);
 
         $plotB = Plot::create([
+            'tenant_id'           => $tenantId,
             'name'                 => 'Talhão B — Milho',
             'area_hectares'        => 32.75,
             'culture'              => 'Milho',
@@ -116,6 +124,7 @@ class DemoDataSeeder extends Seeder
         ]);
 
         $plotC = Plot::create([
+            'tenant_id'           => $tenantId,
             'name'                 => 'Talhão C — Soja (Colhido)',
             'area_hectares'        => 55.20,
             'culture'              => 'Soja',
@@ -127,6 +136,7 @@ class DemoDataSeeder extends Seeder
         ]);
 
         $plotD = Plot::create([
+            'tenant_id'           => $tenantId,
             'name'                 => 'Talhão D — Pousio',
             'area_hectares'        => 18.00,
             'culture'              => null,
@@ -138,6 +148,7 @@ class DemoDataSeeder extends Seeder
         ]);
 
         $plotE = Plot::create([
+            'tenant_id'           => $tenantId,
             'name'                 => 'Talhão E — Feijão',
             'area_hectares'        => 22.30,
             'culture'              => 'Feijão',
@@ -282,6 +293,7 @@ class DemoDataSeeder extends Seeder
 
         foreach ($fieldLogs as $data) {
             // FieldLogService calcula o total_cost e atualiza horas do ativo
+            $data['tenant_id'] = $tenantId;
             $this->fieldLogService->create($data);
         }
 
@@ -290,6 +302,7 @@ class DemoDataSeeder extends Seeder
         // Demonstra o saldo positivo no dashboard financeiro
         // ─────────────────────────────────────────────────────────────────────
         FinancialTransaction::create([
+            'tenant_id'        => $tenantId,
             'field_log_id'     => null,
             'plot_id'          => $plotC->id,
             'type'             => 'income',
@@ -300,6 +313,7 @@ class DemoDataSeeder extends Seeder
         ]);
 
         FinancialTransaction::create([
+            'tenant_id'        => $tenantId,
             'field_log_id'     => null,
             'plot_id'          => $plotA->id,
             'type'             => 'income',

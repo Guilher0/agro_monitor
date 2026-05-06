@@ -11,15 +11,17 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /**
-     * Força o uso da conexão central (landlord) independentemente do contexto
-     * de tenancy ativo. Usuários estão no banco agro_monitor, não nos bancos
-     * de tenant.
-     */
-    protected $connection = 'mysql';
-
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
+
+    /**
+     * Mantém User sempre na conexão central configurada pelo tenancy.
+     * Em testes, isso permite usar sqlite em memória sem acoplar ao mysql.
+     */
+    public function getConnectionName(): ?string
+    {
+        return config('tenancy.database.central_connection', config('database.default'));
+    }
 
     /**
      * Atributos atribuíveis em massa.

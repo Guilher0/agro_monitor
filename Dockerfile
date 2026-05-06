@@ -1,5 +1,5 @@
 # ─── Estágio base: dependências do sistema e extensões PHP ─────────────────────
-FROM php:8.3-fpm-alpine AS base
+FROM php:8.4-fpm-alpine AS base
 
 RUN apk add --no-cache \
     bash \
@@ -34,7 +34,10 @@ RUN docker-php-ext-configure gd \
         pcntl \
         zip
 
-RUN pecl install redis && docker-php-ext-enable redis
+RUN apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS \
+    && pecl install redis \
+    && docker-php-ext-enable redis \
+    && apk del .phpize-deps
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 

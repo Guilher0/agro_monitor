@@ -1,58 +1,132 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# AgroMonitor
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistema de gestao agro com Laravel + Inertia + Vue, preparado para multi-tenancy com Stancl Tenancy e ambiente Docker.
 
-## About Laravel
+## Requisitos
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Docker
+- Docker Compose
+- Git
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Setup Inicial (do zero)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+1. Clone o repositorio.
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/Guilher0/agro_monitor.git
+cd agro_monitor
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+2. Suba os containers.
 
-## Contributing
+```bash
+docker compose up -d
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+3. Rode as migrations do banco central (landlord).
 
-## Code of Conduct
+```bash
+docker compose exec app php artisan migrate --force
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+4. Rode as migrations de tenants.
 
-## Security Vulnerabilities
+```bash
+docker compose exec app php artisan tenants:migrate --force
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+5. Popule dados de exemplo (admin + tenant demo + dados agricolas).
 
-## License
+```bash
+docker compose exec app php artisan db:seed --force
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+6. Limpe cache do Laravel (recomendado no primeiro boot).
+
+```bash
+docker compose exec app php artisan optimize:clear
+```
+
+## Acesso
+
+- App central: http://localhost:8090
+- Vite (dev server): http://localhost:5174
+
+Credenciais de demo:
+
+- Admin central:
+	- Email: admin@agromonitor.app
+	- Senha: password
+- Owner tenant demo:
+	- Email: owner@fazenda-demo.test
+	- Senha: password
+
+## Comandos Uteis
+
+Subir stack completa:
+
+```bash
+docker compose up -d app mysql redis vite queue
+```
+
+Ver status dos servicos:
+
+```bash
+docker compose ps
+```
+
+Logs da aplicacao:
+
+```bash
+docker compose logs -f app
+```
+
+Logs do Vite:
+
+```bash
+docker compose logs -f vite
+```
+
+Parar stack:
+
+```bash
+docker compose down
+```
+
+## Troubleshooting Rapido
+
+Erro: service "agro_app" is not running
+
+- Causa: `agro_app` e o nome do container, nao do servico.
+- Solucao: use `app` no `docker compose exec`.
+
+Exemplo correto:
+
+```bash
+docker compose exec app php artisan migrate --force
+```
+
+Erro: Command "tenancy:migrate" is not defined
+
+- Solucao: o comando correto neste projeto e:
+
+```bash
+docker compose exec app php artisan tenants:migrate --force
+```
+
+Erro de tabela ja existente ao rodar migrate
+
+- Quando o banco ja tem estado antigo/inconsistente, prefira recriar ambiente local:
+
+```bash
+docker compose down -v
+docker compose up -d
+docker compose exec app php artisan migrate --force
+docker compose exec app php artisan db:seed --force
+```
+
+Tela branca no frontend
+
+- Verifique se o Vite esta ativo em `http://localhost:5174`.
+- Use sempre `localhost` (evite misturar com `127.0.0.1`).
+- Faca hard reload no browser (Ctrl+Shift+R).

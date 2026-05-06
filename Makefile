@@ -31,7 +31,7 @@ migrate:
 
 ## Executa as migrations de todos os tenants
 migrate-tenants:
-	$(APP) php artisan tenancy:migrate
+	$(APP) php artisan tenants:migrate
 
 ## Reseta o banco central e roda as migrations + seeds
 migrate-fresh:

@@ -21,6 +21,7 @@
     },
     "dependencies": {
         "apexcharts": "^5.10.6",
-        "vue3-apexcharts": "^1.11.1"
+        "vue3-apexcharts": "^1.11.1",
+        "ziggy-js": "^2.6.2"
     }
 }

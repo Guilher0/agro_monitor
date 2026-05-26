@@ -15,7 +15,9 @@ foreach (config('tenancy.central_domains', ['localhost', '127.0.0.1']) as $domai
         });
 
         Route::get('/dashboard', function () {
-            return Inertia::render('Dashboard');
+            return Inertia::render('CentralDashboard', [
+                'tenantCount' => \App\Models\Tenant::count(),
+            ]);
         })->middleware(['auth', 'verified'])->name('dashboard');
 
         Route::middleware('auth')->group(function () {

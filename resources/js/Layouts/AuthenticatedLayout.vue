@@ -35,36 +35,38 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     Dashboard
                                 </NavLink>
-                                <NavLink
-                                    :href="route('plots.index')"
-                                    :active="route().current('plots.*')"
-                                >
-                                    Talhões
-                                </NavLink>
-                                <NavLink
-                                    :href="route('assets.index')"
-                                    :active="route().current('assets.*')"
-                                >
-                                    Ativos
-                                </NavLink>
-                                <NavLink
-                                    :href="route('field-logs.index')"
-                                    :active="route().current('field-logs.*')"
-                                >
-                                    Caderno
-                                </NavLink>
-                                <NavLink
-                                    :href="route('financial-transactions.index')"
-                                    :active="route().current('financial-transactions.*')"
-                                >
-                                    Financeiro
-                                </NavLink>
+                                <template v-if="$page.props.tenant">
+                                    <NavLink
+                                        :href="route('plots.index')"
+                                        :active="route().current('plots.*')"
+                                    >
+                                        Talhões
+                                    </NavLink>
+                                    <NavLink
+                                        :href="route('assets.index')"
+                                        :active="route().current('assets.*')"
+                                    >
+                                        Ativos
+                                    </NavLink>
+                                    <NavLink
+                                        :href="route('field-logs.index')"
+                                        :active="route().current('field-logs.*')"
+                                    >
+                                        Caderno
+                                    </NavLink>
+                                    <NavLink
+                                        :href="route('financial-transactions.index')"
+                                        :active="route().current('financial-transactions.*')"
+                                    >
+                                        Financeiro
+                                    </NavLink>
+                                </template>
                             </div>
                         </div>
 
                         <div class="hidden sm:ms-6 sm:flex sm:items-center gap-3">
                             <!-- Busca Global -->
-                            <GlobalSearch />
+                            <GlobalSearch v-if="$page.props.tenant" />
 
                             <!-- Settings Dropdown -->
                             <div class="relative ms-3">
@@ -141,18 +143,20 @@ const showingNavigationDropdown = ref(false);
                         <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
                             Dashboard
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink :href="route('plots.index')" :active="route().current('plots.*')">
-                            Talhões
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink :href="route('assets.index')" :active="route().current('assets.*')">
-                            Ativos
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink :href="route('field-logs.index')" :active="route().current('field-logs.*')">
-                            Caderno de Campo
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink :href="route('financial-transactions.index')" :active="route().current('financial-transactions.*')">
-                            Financeiro
-                        </ResponsiveNavLink>
+                        <template v-if="$page.props.tenant">
+                            <ResponsiveNavLink :href="route('plots.index')" :active="route().current('plots.*')">
+                                Talhões
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('assets.index')" :active="route().current('assets.*')">
+                                Ativos
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('field-logs.index')" :active="route().current('field-logs.*')">
+                                Caderno de Campo
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('financial-transactions.index')" :active="route().current('financial-transactions.*')">
+                                Financeiro
+                            </ResponsiveNavLink>
+                        </template>
                     </div>
 
                     <!-- Responsive Settings Options -->

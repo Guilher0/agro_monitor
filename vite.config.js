@@ -5,16 +5,16 @@ import vue from '@vitejs/plugin-vue';
 export default defineConfig({
     server: {
         host: '0.0.0.0',
-        port: 5174,
+        port: 5175,
         strictPort: true,
-        origin: 'http://localhost:5174',
+        origin: 'http://localhost:5175',
         cors: {
-            origin: ['http://localhost:8090', 'http://127.0.0.1:8090'],
+            origin: ['http://localhost:8095', 'http://127.0.0.1:8095'],
             credentials: true,
         },
         hmr: {
             host: 'localhost',
-            port: 5174,
+            port: 5175,
         },
     },
     plugins: [

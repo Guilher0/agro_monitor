@@ -22,23 +22,23 @@ class FieldLogController extends Controller
     {
         $fieldLogs = FieldLog::query()
             ->with(['plot:id,name', 'asset:id,name'])
-            ->when($request->search,        fn ($q, $s) => $q->where('description', 'like', "%{$s}%"))
-            ->when($request->plot_id,       fn ($q, $v) => $q->where('plot_id', $v))
+            ->when($request->search, fn ($q, $s) => $q->where('description', 'like', "%{$s}%"))
+            ->when($request->plot_id, fn ($q, $v) => $q->where('plot_id', $v))
             ->when($request->activity_type, fn ($q, $v) => $q->where('activity_type', $v))
-            ->when($request->date_from,     fn ($q, $v) => $q->where('log_date', '>=', $v))
-            ->when($request->date_to,       fn ($q, $v) => $q->where('log_date', '<=', $v))
+            ->when($request->date_from, fn ($q, $v) => $q->where('log_date', '>=', $v))
+            ->when($request->date_to, fn ($q, $v) => $q->where('log_date', '<=', $v))
             ->orderByDesc('log_date')
             ->paginate(20)
             ->withQueryString()
             ->through(fn (FieldLog $log) => [
-                'id'                    => $log->id,
-                'log_date'              => $log->log_date->format('d/m/Y'),
-                'activity_type'         => $log->activity_type,
-                'description'           => $log->description,
-                'plot'                  => $log->plot?->only('id', 'name'),
-                'asset'                 => $log->asset?->only('id', 'name'),
-                'machine_hours'         => $log->machine_hours,
-                'total_cost'            => $log->total_cost,
+                'id' => $log->id,
+                'log_date' => $log->log_date->format('d/m/Y'),
+                'activity_type' => $log->activity_type,
+                'description' => $log->description,
+                'plot' => $log->plot?->only('id', 'name'),
+                'asset' => $log->asset?->only('id', 'name'),
+                'machine_hours' => $log->machine_hours,
+                'total_cost' => $log->total_cost,
                 'generates_transaction' => $log->generates_transaction,
             ]);
 
@@ -46,8 +46,8 @@ class FieldLogController extends Controller
 
         return Inertia::render('FieldLogs/Index', [
             'fieldLogs' => $fieldLogs,
-            'plots'     => $plots,
-            'filters'   => $request->only(['search', 'plot_id', 'activity_type', 'date_from', 'date_to']),
+            'plots' => $plots,
+            'filters' => $request->only(['search', 'plot_id', 'activity_type', 'date_from', 'date_to']),
         ]);
     }
 
@@ -55,8 +55,8 @@ class FieldLogController extends Controller
     {
         return Inertia::render('FieldLogs/Form', [
             'fieldLog' => null,
-            'plots'    => Plot::orderBy('name')->get(['id', 'name', 'culture']),
-            'assets'   => Asset::where('status', 'active')->orderBy('name')->get(['id', 'name', 'type', 'hourly_rate']),
+            'plots' => Plot::orderBy('name')->get(['id', 'name', 'culture']),
+            'assets' => Asset::where('status', 'active')->orderBy('name')->get(['id', 'name', 'type', 'hourly_rate']),
         ]);
     }
 
@@ -64,7 +64,7 @@ class FieldLogController extends Controller
     {
         $data = array_merge($request->validated(), [
             'tenant_id' => tenant('id'),
-            'user_id'   => Auth::id(),
+            'user_id' => Auth::id(),
         ]);
 
         $this->service->create($data);
@@ -77,8 +77,8 @@ class FieldLogController extends Controller
     {
         return Inertia::render('FieldLogs/Form', [
             'fieldLog' => $fieldLog->load(['plot:id,name', 'asset:id,name,hourly_rate']),
-            'plots'    => Plot::orderBy('name')->get(['id', 'name', 'culture']),
-            'assets'   => Asset::where('status', 'active')->orderBy('name')->get(['id', 'name', 'type', 'hourly_rate']),
+            'plots' => Plot::orderBy('name')->get(['id', 'name', 'culture']),
+            'assets' => Asset::where('status', 'active')->orderBy('name')->get(['id', 'name', 'type', 'hourly_rate']),
         ]);
     }
 

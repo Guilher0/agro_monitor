@@ -15,27 +15,27 @@ class PlotController extends Controller
     public function index(Request $request): Response
     {
         $plots = Plot::query()
-            ->when($request->search,  fn ($q, $s) => $q->where('name', 'like', "%{$s}%")
+            ->when($request->search, fn ($q, $s) => $q->where('name', 'like', "%{$s}%")
                 ->orWhere('culture', 'like', "%{$s}%"))
-            ->when($request->status,  fn ($q, $v) => $q->where('status', $v))
+            ->when($request->status, fn ($q, $v) => $q->where('status', $v))
             ->when($request->culture, fn ($q, $v) => $q->where('culture', $v))
             ->withCount('fieldLogs')
             ->orderBy('name')
             ->paginate(15)
             ->withQueryString()
             ->through(fn (Plot $plot) => [
-                'id'              => $plot->id,
-                'name'            => $plot->name,
-                'area_hectares'   => $plot->area_hectares,
-                'culture'         => $plot->culture,
-                'season'          => $plot->season,
-                'soil_type'       => $plot->soil_type,
-                'status'          => $plot->status,
+                'id' => $plot->id,
+                'name' => $plot->name,
+                'area_hectares' => $plot->area_hectares,
+                'culture' => $plot->culture,
+                'season' => $plot->season,
+                'soil_type' => $plot->soil_type,
+                'status' => $plot->status,
                 'field_logs_count' => $plot->field_logs_count,
             ]);
 
         return Inertia::render('Plots/Index', [
-            'plots'   => $plots,
+            'plots' => $plots,
             'filters' => $request->only(['search', 'status', 'culture']),
         ]);
     }

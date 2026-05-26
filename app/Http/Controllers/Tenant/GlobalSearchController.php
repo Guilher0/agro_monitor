@@ -25,7 +25,7 @@ class GlobalSearchController extends Controller
         ]);
 
         $term = trim($request->q);
-        $like = '%' . $term . '%';
+        $like = '%'.$term.'%';
 
         // ─── Ativos ──────────────────────────────────────────────────────────
         $assets = Asset::where('name', 'like', $like)
@@ -34,11 +34,11 @@ class GlobalSearchController extends Controller
             ->limit(5)
             ->get(['id', 'name', 'type', 'status'])
             ->map(fn ($a) => [
-                'type'     => 'asset',
-                'id'       => $a->id,
-                'title'    => $a->name,
-                'subtitle' => ucfirst($a->type) . ' · ' . ($a->status === 'active' ? 'Ativo' : 'Inativo'),
-                'url'      => route('assets.edit', $a->id),
+                'type' => 'asset',
+                'id' => $a->id,
+                'title' => $a->name,
+                'subtitle' => ucfirst($a->type).' · '.($a->status === 'active' ? 'Ativo' : 'Inativo'),
+                'url' => route('assets.edit', $a->id),
             ]);
 
         // ─── Talhões ─────────────────────────────────────────────────────────
@@ -48,11 +48,11 @@ class GlobalSearchController extends Controller
             ->limit(5)
             ->get(['id', 'name', 'current_culture', 'status'])
             ->map(fn ($p) => [
-                'type'     => 'plot',
-                'id'       => $p->id,
-                'title'    => $p->name,
-                'subtitle' => ($p->current_culture ?? 'Sem cultura') . ' · ' . ucfirst($p->status),
-                'url'      => route('plots.edit', $p->id),
+                'type' => 'plot',
+                'id' => $p->id,
+                'title' => $p->name,
+                'subtitle' => ($p->current_culture ?? 'Sem cultura').' · '.ucfirst($p->status),
+                'url' => route('plots.edit', $p->id),
             ]);
 
         // ─── Caderno de Campo ─────────────────────────────────────────────────
@@ -63,11 +63,11 @@ class GlobalSearchController extends Controller
             ->limit(5)
             ->get()
             ->map(fn ($log) => [
-                'type'     => 'field_log',
-                'id'       => $log->id,
-                'title'    => $log->description ?? ('Registro ' . $log->log_date->format('d/m/Y')),
-                'subtitle' => ($log->plot?->name ?? 'Sem talhão') . ' · ' . $log->log_date->format('d/m/Y'),
-                'url'      => route('field-logs.edit', $log->id),
+                'type' => 'field_log',
+                'id' => $log->id,
+                'title' => $log->description ?? ('Registro '.$log->log_date->format('d/m/Y')),
+                'subtitle' => ($log->plot?->name ?? 'Sem talhão').' · '.$log->log_date->format('d/m/Y'),
+                'url' => route('field-logs.edit', $log->id),
             ]);
 
         return response()->json([

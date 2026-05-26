@@ -11,7 +11,6 @@ use App\Http\Controllers\Tenant\FinancialTransactionController;
 use App\Http\Controllers\Tenant\GlobalSearchController;
 use App\Http\Controllers\Tenant\PlotController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 
@@ -23,37 +22,45 @@ Route::domain('{tenant_domain}')
         PreventAccessFromCentralDomains::class,
     ])->group(function () {
 
-    // Rotas de autenticação do Breeze no contexto de tenant
-    require __DIR__.'/auth.php';
+        // Rotas de autenticação do Breeze no contexto de tenant
+        require __DIR__.'/auth.php';
 
-    // ─── Rotas autenticadas do tenant ────────────────────────────────────────
-    Route::middleware(['auth', 'verified'])->group(function () {
+        Route::get('/', function () {
+            if (auth()->check()) {
+                return redirect()->route('dashboard');
+            }
 
-        Route::get('/dashboard', DashboardController::class)
-            ->name('dashboard');
+            return redirect()->route('login');
+        });
 
-        // Ativos agrícolas
-        Route::resource('assets', AssetController::class)
-            ->except(['show']);
-        Route::get('assets/{asset}/qrcode', AssetQrCodeController::class)
-            ->name('assets.qrcode');
+        // ─── Rotas autenticadas do tenant ────────────────────────────────────────
+        Route::middleware(['auth', 'verified'])->group(function () {
 
-        // Talhões
-        Route::resource('plots', PlotController::class)
-            ->except(['show']);
+            Route::get('/dashboard', DashboardController::class)
+                ->name('dashboard');
 
-        // Caderno de Campo — exportação antes do resource (evita conflito de parâmetro)
-        Route::get('field-logs/export/pdf', FieldLogPdfController::class)
-            ->name('field-logs.export.pdf');
-        Route::resource('field-logs', FieldLogController::class)
-            ->except(['show']);
+            // Ativos agrícolas
+            Route::resource('assets', AssetController::class)
+                ->except(['show']);
+            Route::get('assets/{asset}/qrcode', AssetQrCodeController::class)
+                ->name('assets.qrcode');
 
-        // Busca global (Spotlight — Ctrl+K)
-        Route::get('/search', GlobalSearchController::class)
-            ->name('search');
+            // Talhões
+            Route::resource('plots', PlotController::class)
+                ->except(['show']);
 
-        // Financeiro
-        Route::resource('financial-transactions', FinancialTransactionController::class)
-            ->except(['show']);
+            // Caderno de Campo — exportação antes do resource (evita conflito de parâmetro)
+            Route::get('field-logs/export/pdf', FieldLogPdfController::class)
+                ->name('field-logs.export.pdf');
+            Route::resource('field-logs', FieldLogController::class)
+                ->except(['show']);
+
+            // Busca global (Spotlight — Ctrl+K)
+            Route::get('/search', GlobalSearchController::class)
+                ->name('search');
+
+            // Financeiro
+            Route::resource('financial-transactions', FinancialTransactionController::class)
+                ->except(['show']);
+        });
     });
-});

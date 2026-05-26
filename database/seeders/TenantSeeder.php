@@ -29,13 +29,13 @@ class TenantSeeder extends Seeder
         // ──────────────────────────────────────────────────────────────────────
         // 1. Cria o tenant no banco landlord (agro_monitor)
         // ──────────────────────────────────────────────────────────────────────
-        /** @var \App\Models\Tenant $tenant */
+        /** @var Tenant $tenant */
         $tenant = Tenant::updateOrCreate(
             ['id' => 'fazenda-demo'],
             [
-                'name'          => 'Fazenda Demo',
-                'slug'          => 'fazenda-demo',
-                'plan'          => 'pro',
+                'name' => 'Fazenda Demo',
+                'slug' => 'fazenda-demo',
+                'plan' => 'pro',
                 'trial_ends_at' => null,
             ]
         );
@@ -49,11 +49,11 @@ class TenantSeeder extends Seeder
         User::updateOrCreate(
             ['email' => 'owner@fazenda-demo.test'],
             [
-                'name'              => 'João da Silva',
+                'name' => 'João da Silva',
                 'email_verified_at' => now(),
-                'password'          => Hash::make('password'),
-                'tenant_id'         => $tenant->id,
-                'role'              => 'owner',
+                'password' => Hash::make('password'),
+                'tenant_id' => $tenant->id,
+                'role' => 'owner',
             ]
         );
 
@@ -61,11 +61,11 @@ class TenantSeeder extends Seeder
         User::updateOrCreate(
             ['email' => 'manager@fazenda-demo.test'],
             [
-                'name'              => 'Maria Souza',
+                'name' => 'Maria Souza',
                 'email_verified_at' => now(),
-                'password'          => Hash::make('password'),
-                'tenant_id'         => $tenant->id,
-                'role'              => 'manager',
+                'password' => Hash::make('password'),
+                'tenant_id' => $tenant->id,
+                'role' => 'manager',
             ]
         );
 

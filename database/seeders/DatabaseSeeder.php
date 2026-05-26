@@ -21,11 +21,11 @@ class DatabaseSeeder extends Seeder
         User::firstOrCreate(
             ['email' => 'admin@agromonitor.app'],
             [
-                'name'              => 'Admin AgroMonitor',
+                'name' => 'Admin AgroMonitor',
                 'email_verified_at' => now(),
-                'password'          => Hash::make('password'),
-                'role'              => 'admin',
-                'tenant_id'         => null,
+                'password' => Hash::make('password'),
+                'role' => 'admin',
+                'tenant_id' => null,
             ]
         );
 

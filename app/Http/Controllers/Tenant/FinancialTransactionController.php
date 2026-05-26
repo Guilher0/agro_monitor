@@ -18,29 +18,29 @@ class FinancialTransactionController extends Controller
     {
         $transactions = FinancialTransaction::query()
             ->with('plot:id,name')
-            ->when($request->type,      fn ($q, $v) => $q->where('type', $v))
-            ->when($request->plot_id,   fn ($q, $v) => $q->where('plot_id', $v))
-            ->when($request->category,  fn ($q, $v) => $q->where('category', 'like', "%{$v}%"))
+            ->when($request->type, fn ($q, $v) => $q->where('type', $v))
+            ->when($request->plot_id, fn ($q, $v) => $q->where('plot_id', $v))
+            ->when($request->category, fn ($q, $v) => $q->where('category', 'like', "%{$v}%"))
             ->when($request->date_from, fn ($q, $v) => $q->where('transaction_date', '>=', $v))
-            ->when($request->date_to,   fn ($q, $v) => $q->where('transaction_date', '<=', $v))
+            ->when($request->date_to, fn ($q, $v) => $q->where('transaction_date', '<=', $v))
             ->orderByDesc('transaction_date')
             ->paginate(20)
             ->withQueryString()
             ->through(fn (FinancialTransaction $t) => [
-                'id'               => $t->id,
+                'id' => $t->id,
                 'transaction_date' => $t->transaction_date->format('d/m/Y'),
-                'type'             => $t->type,
-                'category'         => $t->category,
-                'description'      => $t->description,
-                'amount'           => $t->amount,
-                'plot'             => $t->plot?->only('id', 'name'),
-                'field_log_id'     => $t->field_log_id,
+                'type' => $t->type,
+                'category' => $t->category,
+                'description' => $t->description,
+                'amount' => $t->amount,
+                'plot' => $t->plot?->only('id', 'name'),
+                'field_log_id' => $t->field_log_id,
             ]);
 
         // Totais para os cards de resumo
         $summary = FinancialTransaction::query()
             ->when($request->date_from, fn ($q, $v) => $q->where('transaction_date', '>=', $v))
-            ->when($request->date_to,   fn ($q, $v) => $q->where('transaction_date', '<=', $v))
+            ->when($request->date_to, fn ($q, $v) => $q->where('transaction_date', '<=', $v))
             ->select(
                 DB::raw("SUM(CASE WHEN type = 'income'  THEN amount ELSE 0 END) as total_income"),
                 DB::raw("SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as total_expense"),
@@ -51,12 +51,12 @@ class FinancialTransactionController extends Controller
 
         return Inertia::render('FinancialTransactions/Index', [
             'transactions' => $transactions,
-            'summary'      => [
-                'total_income'  => (float) ($summary->total_income  ?? 0),
+            'summary' => [
+                'total_income' => (float) ($summary->total_income ?? 0),
                 'total_expense' => (float) ($summary->total_expense ?? 0),
-                'balance'       => (float) (($summary->total_income ?? 0) - ($summary->total_expense ?? 0)),
+                'balance' => (float) (($summary->total_income ?? 0) - ($summary->total_expense ?? 0)),
             ],
-            'plots'   => $plots,
+            'plots' => $plots,
             'filters' => $request->only(['type', 'plot_id', 'category', 'date_from', 'date_to']),
         ]);
     }
@@ -65,7 +65,7 @@ class FinancialTransactionController extends Controller
     {
         return Inertia::render('FinancialTransactions/Form', [
             'transaction' => null,
-            'plots'       => Plot::orderBy('name')->get(['id', 'name']),
+            'plots' => Plot::orderBy('name')->get(['id', 'name']),
         ]);
     }
 
@@ -90,7 +90,7 @@ class FinancialTransactionController extends Controller
 
         return Inertia::render('FinancialTransactions/Form', [
             'transaction' => $financialTransaction->load('plot:id,name'),
-            'plots'       => Plot::orderBy('name')->get(['id', 'name']),
+            'plots' => Plot::orderBy('name')->get(['id', 'name']),
         ]);
     }
 

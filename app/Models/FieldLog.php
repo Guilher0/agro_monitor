@@ -47,11 +47,11 @@ class FieldLog extends Model
     ];
 
     protected $casts = [
-        'log_date'              => 'date',
-        'machine_hours'         => 'decimal:1',
-        'input_quantity'        => 'decimal:3',
-        'input_unit_price'      => 'decimal:2',
-        'total_cost'            => 'decimal:2',
+        'log_date' => 'date',
+        'machine_hours' => 'decimal:1',
+        'input_quantity' => 'decimal:3',
+        'input_unit_price' => 'decimal:2',
+        'total_cost' => 'decimal:2',
         'generates_transaction' => 'boolean',
     ];
 

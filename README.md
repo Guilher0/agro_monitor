@@ -49,8 +49,8 @@ docker compose exec app php artisan optimize:clear
 
 ## Acesso
 
-- App central: http://localhost:8090
-- Vite (dev server): http://localhost:5174
+- App central: http://localhost:8095
+- Vite (dev server): http://localhost:5175
 
 Credenciais de demo:
 
@@ -127,6 +127,6 @@ docker compose exec app php artisan db:seed --force
 
 Tela branca no frontend
 
-- Verifique se o Vite esta ativo em `http://localhost:5174`.
+- Verifique se o Vite esta ativo em `http://localhost:5175`.
 - Use sempre `localhost` (evite misturar com `127.0.0.1`).
 - Faca hard reload no browser (Ctrl+Shift+R).

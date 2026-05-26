@@ -41,35 +41,35 @@ class AssetFactory extends Factory
         $type = $this->faker->randomElement(['tractor', 'harvester', 'sprayer', 'implement', 'other']);
 
         $name = match ($type) {
-            'tractor'   => $this->faker->randomElement($this->tractorNames),
+            'tractor' => $this->faker->randomElement($this->tractorNames),
             'harvester' => $this->faker->randomElement($this->harvesterNames),
-            'sprayer'   => $this->faker->randomElement($this->sprayerNames),
-            default     => $this->faker->randomElement(['Grade Aradora', 'Plantadeira', 'Subsolador', 'Distribuidor']),
+            'sprayer' => $this->faker->randomElement($this->sprayerNames),
+            default => $this->faker->randomElement(['Grade Aradora', 'Plantadeira', 'Subsolador', 'Distribuidor']),
         };
 
         // hourly_rate varia por tipo de equipamento — reflete valores reais do mercado
         $hourlyRate = match ($type) {
-            'tractor'   => $this->faker->randomFloat(2, 120, 280),
+            'tractor' => $this->faker->randomFloat(2, 120, 280),
             'harvester' => $this->faker->randomFloat(2, 350, 700),
-            'sprayer'   => $this->faker->randomFloat(2, 200, 450),
-            default     => $this->faker->randomFloat(2, 40, 120),
+            'sprayer' => $this->faker->randomFloat(2, 200, 450),
+            default => $this->faker->randomFloat(2, 40, 120),
         };
 
-        $totalHours            = $this->faker->randomFloat(1, 50, 3500);
+        $totalHours = $this->faker->randomFloat(1, 50, 3500);
         $hoursAtLastMaintenance = $this->faker->randomFloat(1, 0, $totalHours);
 
         return [
-            'name'                      => $name,
-            'type'                      => $type,
-            'serial_number'             => strtoupper($this->faker->bothify('??###-????')),
-            'purchase_date'             => $this->faker->dateTimeBetween('-8 years', '-1 year'),
-            'hourly_rate'               => $hourlyRate,
-            'total_hours'               => $totalHours,
+            'name' => $name,
+            'type' => $type,
+            'serial_number' => strtoupper($this->faker->bothify('??###-????')),
+            'purchase_date' => $this->faker->dateTimeBetween('-8 years', '-1 year'),
+            'hourly_rate' => $hourlyRate,
+            'total_hours' => $totalHours,
             'hours_at_last_maintenance' => $hoursAtLastMaintenance,
-            'last_maintenance_at'       => $this->faker->dateTimeBetween('-6 months', 'now'),
-            'maintenance_alert_hours'   => $this->faker->randomElement([100, 150, 200, 250, 500]),
-            'status'                    => $this->faker->randomElement(['active', 'active', 'active', 'maintenance']),
-            'notes'                     => null,
+            'last_maintenance_at' => $this->faker->dateTimeBetween('-6 months', 'now'),
+            'maintenance_alert_hours' => $this->faker->randomElement([100, 150, 200, 250, 500]),
+            'status' => $this->faker->randomElement(['active', 'active', 'active', 'maintenance']),
+            'notes' => null,
         ];
     }
 
@@ -77,10 +77,10 @@ class AssetFactory extends Factory
     public function needsMaintenance(): static
     {
         return $this->state(fn (array $attributes) => [
-            'total_hours'               => 1500,
+            'total_hours' => 1500,
             'hours_at_last_maintenance' => 1000,
-            'maintenance_alert_hours'   => 250,
-            'status'                    => 'active',
+            'maintenance_alert_hours' => 250,
+            'status' => 'active',
         ]);
     }
 }

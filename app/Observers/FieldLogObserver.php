@@ -46,11 +46,11 @@ class FieldLogObserver
             if ($existingTransaction) {
                 // Atualiza o valor se o custo mudou
                 $existingTransaction->update([
-                    'amount'           => $fieldLog->total_cost,
-                    'description'      => $this->buildDescription($fieldLog),
+                    'amount' => $fieldLog->total_cost,
+                    'description' => $this->buildDescription($fieldLog),
                     'transaction_date' => $fieldLog->log_date,
-                    'plot_id'          => $fieldLog->plot_id,
-                    'category'         => $this->resolveCategory($fieldLog->activity_type),
+                    'plot_id' => $fieldLog->plot_id,
+                    'category' => $this->resolveCategory($fieldLog->activity_type),
                 ]);
             } else {
                 // generates_transaction foi ativado agora — cria a transação
@@ -76,13 +76,13 @@ class FieldLogObserver
     private function createTransaction(FieldLog $fieldLog): FinancialTransaction
     {
         return FinancialTransaction::create([
-            'tenant_id'        => $fieldLog->tenant_id,
-            'field_log_id'     => $fieldLog->id,
-            'plot_id'          => $fieldLog->plot_id,
-            'type'             => 'expense',
-            'category'         => $this->resolveCategory($fieldLog->activity_type),
-            'amount'           => $fieldLog->total_cost,
-            'description'      => $this->buildDescription($fieldLog),
+            'tenant_id' => $fieldLog->tenant_id,
+            'field_log_id' => $fieldLog->id,
+            'plot_id' => $fieldLog->plot_id,
+            'type' => 'expense',
+            'category' => $this->resolveCategory($fieldLog->activity_type),
+            'amount' => $fieldLog->total_cost,
+            'description' => $this->buildDescription($fieldLog),
             'transaction_date' => $fieldLog->log_date,
         ]);
     }
@@ -94,13 +94,13 @@ class FieldLogObserver
     private function resolveCategory(string $activityType): string
     {
         return match ($activityType) {
-            'planting'     => 'Plantio',
-            'spraying'     => 'Defensivos / Pulverização',
-            'harvesting'   => 'Colheita',
-            'fertilizing'  => 'Fertilizantes / Adubação',
-            'maintenance'  => 'Manutenção de Máquinas',
-            'irrigation'   => 'Irrigação',
-            default        => 'Outros',
+            'planting' => 'Plantio',
+            'spraying' => 'Defensivos / Pulverização',
+            'harvesting' => 'Colheita',
+            'fertilizing' => 'Fertilizantes / Adubação',
+            'maintenance' => 'Manutenção de Máquinas',
+            'irrigation' => 'Irrigação',
+            default => 'Outros',
         };
     }
 

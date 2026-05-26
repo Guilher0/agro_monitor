@@ -43,10 +43,10 @@ class Asset extends Model
     ];
 
     protected $casts = [
-        'purchase_date'             => 'date',
-        'last_maintenance_at'       => 'date',
-        'hourly_rate'               => 'decimal:2',
-        'total_hours'               => 'decimal:1',
+        'purchase_date' => 'date',
+        'last_maintenance_at' => 'date',
+        'hourly_rate' => 'decimal:2',
+        'total_hours' => 'decimal:1',
         'hours_at_last_maintenance' => 'decimal:1',
     ];
 

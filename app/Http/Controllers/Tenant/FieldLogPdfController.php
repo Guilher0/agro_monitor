@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Tenant;
 
 use App\Http\Controllers\Controller;
 use App\Models\FieldLog;
+use App\Models\FinancialTransaction;
 use App\Models\Plot;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -24,9 +25,9 @@ class FieldLogPdfController extends Controller
     public function __invoke(Request $request): Response
     {
         $request->validate([
-            'plot_id'   => ['nullable', 'integer', 'exists:plots,id'],
+            'plot_id' => ['nullable', 'integer', 'exists:plots,id'],
             'date_from' => ['nullable', 'date'],
-            'date_to'   => ['nullable', 'date', 'after_or_equal:date_from'],
+            'date_to' => ['nullable', 'date', 'after_or_equal:date_from'],
         ]);
 
         $query = FieldLog::with(['plot:id,name', 'asset:id,name', 'user:id,name'])
@@ -50,11 +51,11 @@ class FieldLogPdfController extends Controller
         $logs = $query->get();
 
         // Resumo financeiro dos registros filtrados
-        $totalIncome  = $logs->sum(fn ($log) => $log->generates_transaction ? 0 : 0); // reservado
+        $totalIncome = $logs->sum(fn ($log) => $log->generates_transaction ? 0 : 0); // reservado
         $totalExpense = $logs->sum(fn ($log) => (float) ($log->total_cost ?? 0));
 
         // Receitas do período a partir das transações vinculadas
-        $transactionQuery = \App\Models\FinancialTransaction::query();
+        $transactionQuery = FinancialTransaction::query();
         if ($request->filled('plot_id')) {
             $transactionQuery->where('plot_id', $request->plot_id);
         }
@@ -64,32 +65,32 @@ class FieldLogPdfController extends Controller
         if ($request->filled('date_to')) {
             $transactionQuery->whereDate('transaction_date', '<=', $request->date_to);
         }
-        $totalIncome  = $transactionQuery->where('type', 'income')->sum('amount');
+        $totalIncome = $transactionQuery->where('type', 'income')->sum('amount');
         $totalExpense = $transactionQuery->where('type', 'expense')->sum('amount');
 
         $activityLabels = [
-            'planting'    => 'Plantio',
-            'spraying'    => 'Pulverização',
-            'harvesting'  => 'Colheita',
+            'planting' => 'Plantio',
+            'spraying' => 'Pulverização',
+            'harvesting' => 'Colheita',
             'fertilizing' => 'Adubação',
             'maintenance' => 'Manutenção',
-            'irrigation'  => 'Irrigação',
-            'soil_prep'   => 'Preparo do Solo',
-            'other'       => 'Outro',
+            'irrigation' => 'Irrigação',
+            'soil_prep' => 'Preparo do Solo',
+            'other' => 'Outro',
         ];
 
         $pdf = Pdf::loadView('pdf.field-logs', [
-            'logs'           => $logs,
-            'filter_plot'    => $filterPlot,
-            'filter_from'    => $request->date_from,
-            'filter_to'      => $request->date_to,
-            'total_income'   => (float) $totalIncome,
-            'total_expense'  => (float) $totalExpense,
+            'logs' => $logs,
+            'filter_plot' => $filterPlot,
+            'filter_from' => $request->date_from,
+            'filter_to' => $request->date_to,
+            'total_income' => (float) $totalIncome,
+            'total_expense' => (float) $totalExpense,
             'activityLabels' => $activityLabels,
-            'tenant_name'    => tenant('id') ?? 'Fazenda',
+            'tenant_name' => tenant('id') ?? 'Fazenda',
         ])->setPaper('a4', 'landscape');
 
-        $filename = 'caderno-campo-' . now()->format('Y-m-d') . '.pdf';
+        $filename = 'caderno-campo-'.now()->format('Y-m-d').'.pdf';
 
         return $pdf->download($filename);
     }

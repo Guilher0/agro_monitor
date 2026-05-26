@@ -33,17 +33,17 @@ class PlotFactory extends Factory
     public function definition(): array
     {
         $culture = $this->faker->randomElement($this->cultures);
-        $year    = date('Y');
+        $year = date('Y');
 
         return [
-            'name'                 => 'Talhão ' . $this->faker->randomElement(['A', 'B', 'C', 'D', 'E', 'Norte', 'Sul', 'Leste', 'Oeste']),
-            'area_hectares'        => $this->faker->randomFloat(2, 5, 250),
-            'culture'              => $culture,
-            'season'               => "{$year}/{$year}",
+            'name' => 'Talhão '.$this->faker->randomElement(['A', 'B', 'C', 'D', 'E', 'Norte', 'Sul', 'Leste', 'Oeste']),
+            'area_hectares' => $this->faker->randomFloat(2, 5, 250),
+            'culture' => $culture,
+            'season' => "{$year}/{$year}",
             'location_coordinates' => null,
-            'soil_type'            => $this->faker->randomElement($this->soilTypes),
-            'status'               => $this->faker->randomElement(['active', 'active', 'fallow', 'harvested']),
-            'notes'                => null,
+            'soil_type' => $this->faker->randomElement($this->soilTypes),
+            'status' => $this->faker->randomElement(['active', 'active', 'fallow', 'harvested']),
+            'notes' => null,
         ];
     }
 
@@ -51,10 +51,11 @@ class PlotFactory extends Factory
     public function soybean(): static
     {
         $year = date('Y');
+
         return $this->state(fn () => [
             'culture' => 'Soja',
-            'season'  => "{$year}/{$year}",
-            'status'  => 'active',
+            'season' => "{$year}/{$year}",
+            'status' => 'active',
         ]);
     }
 
@@ -62,7 +63,8 @@ class PlotFactory extends Factory
     public function harvested(): static
     {
         $prevYear = date('Y') - 1;
-        $year     = date('Y');
+        $year = date('Y');
+
         return $this->state(fn () => [
             'status' => 'harvested',
             'season' => "{$prevYear}/{$year}",

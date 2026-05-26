@@ -18,8 +18,8 @@ class DashboardController extends Controller
         // ─────────────────────────────────────────────────────────────────────
         // KPI Cards — contagens rápidas
         // ─────────────────────────────────────────────────────────────────────
-        $totalAssets  = Asset::count();
-        $activePlots  = Plot::where('status', 'active')->count();
+        $totalAssets = Asset::count();
+        $activePlots = Plot::where('status', 'active')->count();
         $logsThisMonth = FieldLog::whereMonth('log_date', now()->month)
             ->whereYear('log_date', now()->year)
             ->count();
@@ -53,21 +53,21 @@ class DashboardController extends Controller
             ->orderBy('plots.name')
             ->get()
             ->map(fn ($row) => [
-                'name'    => $row->name,
-                'receita' => round((float) $row->income,  2),
-                'custo'   => round((float) $row->expense, 2),
-                'lucro'   => round((float) $row->income - (float) $row->expense, 2),
+                'name' => $row->name,
+                'receita' => round((float) $row->income, 2),
+                'custo' => round((float) $row->expense, 2),
+                'lucro' => round((float) $row->income - (float) $row->expense, 2),
             ]);
 
         // ─────────────────────────────────────────────────────────────────────
         // Horas de máquina por tipo — dados para o gráfico de rosca
         // ─────────────────────────────────────────────────────────────────────
         $typeLabels = [
-            'tractor'   => 'Trator',
+            'tractor' => 'Trator',
             'harvester' => 'Colheitadeira',
-            'sprayer'   => 'Pulverizador',
+            'sprayer' => 'Pulverizador',
             'implement' => 'Implemento',
-            'other'     => 'Outro',
+            'other' => 'Outro',
         ];
 
         $hoursByType = Asset::select('type', DB::raw('SUM(total_hours) as hours'))
@@ -94,8 +94,8 @@ class DashboardController extends Controller
             ->orderBy('month')
             ->get()
             ->map(fn ($row) => [
-                'label'   => $row->label,
-                'receita' => round((float) $row->income,  2),
+                'label' => $row->label,
+                'receita' => round((float) $row->income, 2),
                 'despesa' => round((float) $row->expense, 2),
             ]);
 
@@ -108,10 +108,10 @@ class DashboardController extends Controller
             ->limit(5)
             ->get(['id', 'name', 'type', 'total_hours', 'hours_at_last_maintenance', 'maintenance_alert_hours'])
             ->map(fn ($a) => [
-                'id'                  => $a->id,
-                'name'                => $a->name,
-                'type'                => $typeLabels[$a->type] ?? $a->type,
-                'hours_overdue'       => round((float) $a->total_hours - (float) $a->hours_at_last_maintenance, 1),
+                'id' => $a->id,
+                'name' => $a->name,
+                'type' => $typeLabels[$a->type] ?? $a->type,
+                'hours_overdue' => round((float) $a->total_hours - (float) $a->hours_at_last_maintenance, 1),
                 'maintenance_alert_hours' => $a->maintenance_alert_hours,
             ]);
 
@@ -123,30 +123,30 @@ class DashboardController extends Controller
             ->limit(6)
             ->get()
             ->map(fn ($log) => [
-                'id'            => $log->id,
-                'log_date'      => $log->log_date->format('d/m/Y'),
+                'id' => $log->id,
+                'log_date' => $log->log_date->format('d/m/Y'),
                 'activity_type' => $log->activity_type,
-                'description'   => $log->description,
-                'plot_name'     => $log->plot?->name,
-                'asset_name'    => $log->asset?->name,
-                'total_cost'    => (float) $log->total_cost,
+                'description' => $log->description,
+                'plot_name' => $log->plot?->name,
+                'asset_name' => $log->asset?->name,
+                'total_cost' => (float) $log->total_cost,
             ]);
 
         return Inertia::render('Dashboard', [
             'kpis' => [
-                'total_assets'           => $totalAssets,
-                'active_plots'           => $activePlots,
-                'logs_this_month'        => $logsThisMonth,
+                'total_assets' => $totalAssets,
+                'active_plots' => $activePlots,
+                'logs_this_month' => $logsThisMonth,
                 'maintenance_alert_count' => $maintenanceAlertCount,
-                'total_income'           => round((float) ($financial->total_income  ?? 0), 2),
-                'total_expense'          => round((float) ($financial->total_expense ?? 0), 2),
-                'balance'                => round((float) (($financial->total_income ?? 0) - ($financial->total_expense ?? 0)), 2),
+                'total_income' => round((float) ($financial->total_income ?? 0), 2),
+                'total_expense' => round((float) ($financial->total_expense ?? 0), 2),
+                'balance' => round((float) (($financial->total_income ?? 0) - ($financial->total_expense ?? 0)), 2),
             ],
-            'profitByPlot'      => $profitByPlot,
-            'hoursByType'       => $hoursByType,
-            'monthlyTrend'      => $monthlyTrend,
+            'profitByPlot' => $profitByPlot,
+            'hoursByType' => $hoursByType,
+            'monthlyTrend' => $monthlyTrend,
             'maintenanceAlerts' => $maintenanceAlerts,
-            'recentLogs'        => $recentLogs,
+            'recentLogs' => $recentLogs,
         ]);
     }
 }

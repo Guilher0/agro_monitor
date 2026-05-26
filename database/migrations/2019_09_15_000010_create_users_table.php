@@ -24,8 +24,8 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('tenant_id')
-                  ->references('id')->on('tenants')
-                  ->nullOnDelete();
+                ->references('id')->on('tenants')
+                ->nullOnDelete();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

@@ -53,15 +53,15 @@ class FieldLogService
      * Recalcula o custo e ajusta o delta de horas do ativo (diferença entre
      * o valor antigo e o novo para não duplicar o acumulador).
      *
-     * @param  FieldLog              $fieldLog  Registro a ser atualizado.
-     * @param  array<string, mixed>  $data      Dados validados do formulário.
+     * @param  FieldLog  $fieldLog  Registro a ser atualizado.
+     * @param  array<string, mixed>  $data  Dados validados do formulário.
      * @return FieldLog O registro atualizado.
      */
     public function update(FieldLog $fieldLog, array $data): FieldLog
     {
         return DB::transaction(function () use ($fieldLog, $data) {
-            $oldMachineHours  = (float) ($fieldLog->machine_hours ?? 0);
-            $oldAssetId       = $fieldLog->asset_id;
+            $oldMachineHours = (float) ($fieldLog->machine_hours ?? 0);
+            $oldAssetId = $fieldLog->asset_id;
 
             $data['total_cost'] = $this->calculateCost($data);
 
@@ -95,21 +95,20 @@ class FieldLogService
      *   Custo = (Horas de Máquina × Valor/Hora) + (Quantidade de Insumo × Preço Unitário)
      *
      * @param  array<string, mixed>  $data
-     * @return float
      */
     public function calculateCost(array $data): float
     {
         $machineCost = 0.0;
-        $inputCost   = 0.0;
+        $inputCost = 0.0;
 
         // Custo da máquina: busca o hourly_rate do ativo para não depender do front-end
-        if (!empty($data['asset_id']) && !empty($data['machine_hours'])) {
-            $asset       = Asset::find($data['asset_id']);
+        if (! empty($data['asset_id']) && ! empty($data['machine_hours'])) {
+            $asset = Asset::find($data['asset_id']);
             $machineCost = (float) ($asset?->hourly_rate ?? 0) * (float) $data['machine_hours'];
         }
 
         // Custo do insumo (herbicida, fertilizante, semente, etc.)
-        if (!empty($data['input_quantity']) && !empty($data['input_unit_price'])) {
+        if (! empty($data['input_quantity']) && ! empty($data['input_unit_price'])) {
             $inputCost = (float) $data['input_quantity'] * (float) $data['input_unit_price'];
         }
 

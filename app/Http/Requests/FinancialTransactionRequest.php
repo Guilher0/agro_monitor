@@ -14,11 +14,11 @@ class FinancialTransactionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'plot_id'          => ['nullable', 'integer', 'exists:plots,id'],
-            'type'             => ['required', 'in:income,expense'],
-            'category'         => ['required', 'string', 'max:100'],
-            'amount'           => ['required', 'numeric', 'min:0.01', 'max:99999999.99'],
-            'description'      => ['required', 'string', 'max:1000'],
+            'plot_id' => ['nullable', 'integer', 'exists:plots,id'],
+            'type' => ['required', 'in:income,expense'],
+            'category' => ['required', 'string', 'max:100'],
+            'amount' => ['required', 'numeric', 'min:0.01', 'max:99999999.99'],
+            'description' => ['required', 'string', 'max:1000'],
             'transaction_date' => ['required', 'date'],
         ];
     }
@@ -26,11 +26,11 @@ class FinancialTransactionRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'plot_id'          => 'talhão',
-            'type'             => 'tipo',
-            'category'         => 'categoria',
-            'amount'           => 'valor',
-            'description'      => 'descrição',
+            'plot_id' => 'talhão',
+            'type' => 'tipo',
+            'category' => 'categoria',
+            'amount' => 'valor',
+            'description' => 'descrição',
             'transaction_date' => 'data',
         ];
     }

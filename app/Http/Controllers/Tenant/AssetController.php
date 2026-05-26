@@ -17,25 +17,25 @@ class AssetController extends Controller
         $assets = Asset::query()
             ->when($request->search, fn ($q, $s) => $q->where('name', 'like', "%{$s}%")
                 ->orWhere('serial_number', 'like', "%{$s}%"))
-            ->when($request->type,   fn ($q, $v) => $q->where('type', $v))
+            ->when($request->type, fn ($q, $v) => $q->where('type', $v))
             ->when($request->status, fn ($q, $v) => $q->where('status', $v))
             ->orderBy('name')
             ->paginate(15)
             ->withQueryString()
             ->through(fn (Asset $asset) => [
-                'id'               => $asset->id,
-                'name'             => $asset->name,
-                'type'             => $asset->type,
-                'serial_number'    => $asset->serial_number,
-                'status'           => $asset->status,
-                'total_hours'      => $asset->total_hours,
-                'hourly_rate'      => $asset->hourly_rate,
+                'id' => $asset->id,
+                'name' => $asset->name,
+                'type' => $asset->type,
+                'serial_number' => $asset->serial_number,
+                'status' => $asset->status,
+                'total_hours' => $asset->total_hours,
+                'hourly_rate' => $asset->hourly_rate,
                 'needs_maintenance' => $asset->needs_maintenance,
                 'last_maintenance_at' => $asset->last_maintenance_at?->format('d/m/Y'),
             ]);
 
         return Inertia::render('Assets/Index', [
-            'assets'  => $assets,
+            'assets' => $assets,
             'filters' => $request->only(['search', 'type', 'status']),
         ]);
     }

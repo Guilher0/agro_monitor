@@ -29,9 +29,9 @@ class AssetQrCodeController extends Controller
             ->generate($url);
 
         return response($svg, 200, [
-            'Content-Type'        => 'image/svg+xml',
-            'Content-Disposition' => 'inline; filename="qrcode-ativo-' . $asset->id . '.svg"',
-            'Cache-Control'       => 'public, max-age=3600',
+            'Content-Type' => 'image/svg+xml',
+            'Content-Disposition' => 'inline; filename="qrcode-ativo-'.$asset->id.'.svg"',
+            'Cache-Control' => 'public, max-age=3600',
         ]);
     }
 }

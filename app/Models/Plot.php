@@ -40,7 +40,7 @@ class Plot extends Model
     ];
 
     protected $casts = [
-        'area_hectares'        => 'decimal:2',
+        'area_hectares' => 'decimal:2',
         'location_coordinates' => 'array',
     ];
 

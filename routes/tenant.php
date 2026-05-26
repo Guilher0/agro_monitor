@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\Tenant\AssetController;
 use App\Http\Controllers\Tenant\AssetQrCodeController;
+use App\Http\Controllers\Tenant\CattleLotController;
 use App\Http\Controllers\Tenant\DashboardController;
 use App\Http\Controllers\Tenant\FieldLogController;
 use App\Http\Controllers\Tenant\FieldLogPdfController;
@@ -20,6 +21,7 @@ Route::domain('{tenant_domain}')
         'web',
         InitializeTenancyByDomain::class,
         PreventAccessFromCentralDomains::class,
+        \App\Http\Middleware\RemoveTenantDomainParameter::class,
     ])->group(function () {
 
         // Rotas de autenticação do Breeze no contexto de tenant
@@ -62,5 +64,14 @@ Route::domain('{tenant_domain}')
             // Financeiro
             Route::resource('financial-transactions', FinancialTransactionController::class)
                 ->except(['show']);
+
+            // Pecuária (Lotes, Pesagens e Vendas)
+            Route::resource('cattle-lots', CattleLotController::class);
+            Route::post('cattle-lots/{cattle_lot}/weight-logs', [CattleLotController::class, 'storeWeightLog'])
+                ->name('cattle-lots.weight-logs.store');
+            Route::delete('cattle-lots/{cattle_lot}/weight-logs/{weight_log}', [CattleLotController::class, 'destroyWeightLog'])
+                ->name('cattle-lots.weight-logs.destroy');
+            Route::post('cattle-lots/{cattle_lot}/sell', [CattleLotController::class, 'sell'])
+                ->name('cattle-lots.sell');
         });
     });

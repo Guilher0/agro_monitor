@@ -39,6 +39,7 @@ class FinancialTransaction extends Model
         'tenant_id',
         'field_log_id',
         'plot_id',
+        'cattle_lot_id',
         'type',
         'category',
         'amount',
@@ -69,5 +70,15 @@ class FinancialTransaction extends Model
     public function plot(): BelongsTo
     {
         return $this->belongsTo(Plot::class);
+    }
+
+    /**
+     * Lote de gado ao qual esta transação está vinculada.
+     * Null quando é um lançamento financeiro geral ou associado a outra área.
+     * Relação: N:1 (muitas transações → um lote, opcional).
+     */
+    public function cattleLot(): BelongsTo
+    {
+        return $this->belongsTo(CattleLot::class);
     }
 }

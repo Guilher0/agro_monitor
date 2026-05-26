@@ -60,6 +60,12 @@ const showingNavigationDropdown = ref(false);
                                     >
                                         Financeiro
                                     </NavLink>
+                                    <NavLink
+                                        href="/cattle-lots"
+                                        :active="route().current('cattle-lots.*')"
+                                    >
+                                        Pecuária
+                                    </NavLink>
                                 </template>
                             </div>
                         </div>
@@ -155,6 +161,9 @@ const showingNavigationDropdown = ref(false);
                             </ResponsiveNavLink>
                             <ResponsiveNavLink href="/financial-transactions" :active="route().current('financial-transactions.*')">
                                 Financeiro
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink href="/cattle-lots" :active="route().current('cattle-lots.*')">
+                                Pecuária
                             </ResponsiveNavLink>
                         </template>
                     </div>

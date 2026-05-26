@@ -71,11 +71,20 @@ class TenancyServiceProvider extends ServiceProvider
             Events\InitializingTenancy::class => [],
             Events\TenancyInitialized::class => [
                 Listeners\BootstrapTenancy::class,
+                function (Events\TenancyInitialized $event) {
+                    $domain = $event->tenancy->tenant->domains->first()?->domain;
+                    if ($domain) {
+                        url()->defaults(['tenant_domain' => $domain]);
+                    }
+                },
             ],
 
             Events\EndingTenancy::class => [],
             Events\TenancyEnded::class => [
                 Listeners\RevertToCentralContext::class,
+                function (Events\TenancyEnded $event) {
+                    url()->defaults(['tenant_domain' => null]);
+                },
             ],
 
             Events\BootstrappingTenancy::class => [],

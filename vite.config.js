@@ -8,10 +8,7 @@ export default defineConfig({
         port: 5175,
         strictPort: true,
         origin: 'http://localhost:5175',
-        cors: {
-            origin: ['http://localhost:8095', 'http://127.0.0.1:8095'],
-            credentials: true,
-        },
+        cors: true,
         hmr: {
             host: 'localhost',
             port: 5175,

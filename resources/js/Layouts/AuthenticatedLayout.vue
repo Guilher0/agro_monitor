@@ -100,7 +100,7 @@ const showingNavigationDropdown = ref(false);
                                             Perfil
                                         </DropdownLink>
                                         <DropdownLink
-                                            :href="route('logout')"
+                                            href="/logout"
                                             method="post"
                                             as="button"
                                         >
@@ -174,7 +174,7 @@ const showingNavigationDropdown = ref(false);
                             <ResponsiveNavLink :href="route('profile.edit')">
                                 Perfil
                             </ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('logout')" method="post" as="button">
+                            <ResponsiveNavLink href="/logout" method="post" as="button">
                                 Sair
                             </ResponsiveNavLink>
                         </div>

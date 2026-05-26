@@ -30,32 +30,32 @@ const showingNavigationDropdown = ref(false);
                             <!-- Navigation Links -->
                             <div class="hidden space-x-1 sm:-my-px sm:ms-8 sm:flex">
                                 <NavLink
-                                    :href="route('dashboard')"
+                                    href="/dashboard"
                                     :active="route().current('dashboard')"
                                 >
                                     Dashboard
                                 </NavLink>
                                 <template v-if="$page.props.tenant">
                                     <NavLink
-                                        :href="route('plots.index')"
+                                        href="/plots"
                                         :active="route().current('plots.*')"
                                     >
                                         Talhões
                                     </NavLink>
                                     <NavLink
-                                        :href="route('assets.index')"
+                                        href="/assets"
                                         :active="route().current('assets.*')"
                                     >
                                         Ativos
                                     </NavLink>
                                     <NavLink
-                                        :href="route('field-logs.index')"
+                                        href="/field-logs"
                                         :active="route().current('field-logs.*')"
                                     >
                                         Caderno
                                     </NavLink>
                                     <NavLink
-                                        :href="route('financial-transactions.index')"
+                                        href="/financial-transactions"
                                         :active="route().current('financial-transactions.*')"
                                     >
                                         Financeiro
@@ -96,7 +96,7 @@ const showingNavigationDropdown = ref(false);
                                     </template>
 
                                     <template #content>
-                                        <DropdownLink :href="route('profile.edit')">
+                                        <DropdownLink href="/profile">
                                             Perfil
                                         </DropdownLink>
                                         <DropdownLink
@@ -140,20 +140,20 @@ const showingNavigationDropdown = ref(false);
                     class="sm:hidden"
                 >
                     <div class="space-y-1 pb-3 pt-2">
-                        <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                        <ResponsiveNavLink href="/dashboard" :active="route().current('dashboard')">
                             Dashboard
                         </ResponsiveNavLink>
                         <template v-if="$page.props.tenant">
-                            <ResponsiveNavLink :href="route('plots.index')" :active="route().current('plots.*')">
+                            <ResponsiveNavLink href="/plots" :active="route().current('plots.*')">
                                 Talhões
                             </ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('assets.index')" :active="route().current('assets.*')">
+                            <ResponsiveNavLink href="/assets" :active="route().current('assets.*')">
                                 Ativos
                             </ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('field-logs.index')" :active="route().current('field-logs.*')">
+                            <ResponsiveNavLink href="/field-logs" :active="route().current('field-logs.*')">
                                 Caderno de Campo
                             </ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('financial-transactions.index')" :active="route().current('financial-transactions.*')">
+                            <ResponsiveNavLink href="/financial-transactions" :active="route().current('financial-transactions.*')">
                                 Financeiro
                             </ResponsiveNavLink>
                         </template>
@@ -171,7 +171,7 @@ const showingNavigationDropdown = ref(false);
                         </div>
 
                         <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('profile.edit')">
+                            <ResponsiveNavLink href="/profile">
                                 Perfil
                             </ResponsiveNavLink>
                             <ResponsiveNavLink href="/logout" method="post" as="button">

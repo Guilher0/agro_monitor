@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Models\Tenant;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -16,7 +17,7 @@ foreach (config('tenancy.central_domains', ['localhost', '127.0.0.1']) as $domai
 
         Route::get('/dashboard', function () {
             return Inertia::render('CentralDashboard', [
-                'tenantCount' => \App\Models\Tenant::count(),
+                'tenantCount' => Tenant::count(),
             ]);
         })->middleware(['auth', 'verified'])->name('dashboard');
 

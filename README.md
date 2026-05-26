@@ -50,7 +50,7 @@ docker compose exec app php artisan optimize:clear
 ## Acesso
 
 - App central: http://localhost:8095
-- Vite (dev server): http://localhost:5175
+- Vite (dev server): http://localhost:5175  
 
 Credenciais de demo:
 
